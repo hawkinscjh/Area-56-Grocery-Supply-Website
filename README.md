@@ -1,2 +1,2 @@
 # cs340_project
-Implement a website with full CRUD backend capabilities using mySQL and NodeJS.
+Collaborate with a classmate to implement a website with full CRUD (Create, Read, Update, Delete) backend capabilities using mySQL and NodeJS.
