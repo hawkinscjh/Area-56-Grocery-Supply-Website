@@ -1,2 +1,2 @@
 # cs340_project
-The new project repository
+Implement a website with full CRUD backend capabilities using mySQL and NodeJS.
