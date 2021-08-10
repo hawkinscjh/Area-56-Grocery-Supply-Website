@@ -1,0 +1,125 @@
+
+    <fieldset>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301">Home</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/clients">Clients</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/contacts">Contacts</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/products">Products</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/orders">Orders</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/sales_representatives">Sales Representatives</a></button>
+    </fieldset>
+    <fieldset>
+        <h1>
+            Orders
+        </h1>
+    </fieldset>
+    <fieldset>
+    <h2>Add Order</h2>
+    <form id="add-order-form-ajax">
+        <label>Sales Rep:* <!--<input type="number" name="repIDInput" id="repIDInput">--></label>
+            <select  name="repIDInput" id="repIDInput">
+                <option>Select Rep</option>
+                    {{#each reps}}
+                    <option value={{this.repID}}>{{this.fName}} {{this.lName}}</option>
+                    {{/each}}
+            </select>        
+        
+        <label>Client:* <!--<input type="number" name="clientIDInput" id="clientIDInput">--></label>    
+            <select  name="clientIDInput" id="clientIDInput">
+                <option>Select Client</option>
+                    {{#each clients}}
+                    <option value={{this.clientID}}>{{this.name}}</option>
+                    {{/each}}
+            </select>        
+        
+        
+        <input type="submit" value="submit">
+    </form>
+     </fieldset>   
+     <fieldset>
+    <p></p>
+
+    <h2>Orders Table</h2>
+
+    <!--Search field-->
+
+    <h3>Search</h3>
+        <form id="search-order-html" method='GET' action='/orders'>
+            <label for="input-orderID">Search by OrderID: </label>
+            <input type="number" name="orderID" id="input-orderID-html-search">
+            
+            <input type="submit">
+
+        </form>
+        OR
+        <form id="search-order-html" method='GET' action='/orders'>
+            <label for="input-repID">Search by Rep: </label>
+        <!--    <input type="number" name="repID" id="input-repID-html-search"> -->
+            
+            <select  name="repID" id="input-repID-html-search">
+                <option>Select Rep</option>
+                    {{#each reps}}
+                    <option value={{this.repID}}>{{this.fName}} {{this.lName}}</option>
+                    {{/each}}
+            </select>
+
+            
+            <input type="submit">
+
+        </form>
+        OR
+            <form id="search-order-html" method='GET' action='/orders'>
+            <label for="input-clientID">Search by clientID: </label>
+           <!--   <input type="number" name="clientID" id="input-clientID-html-search">-->
+
+            <select  name="clientID" id="input-clientID-html-search">
+                <option>Select Client</option>
+                    {{#each clients}}
+                    <option value={{this.clientID}}>{{this.name}}</option>
+                    {{/each}}
+            </select>
+
+
+            <input type="submit">
+
+        </form>
+<a href='/orders'><button>Reset Search</button></a><b></b>
+<p></p>
+        <!-- Data Table-->
+<table id="dataTable">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.orderID}}</td>
+            <td>{{this.repID}}</td>
+            <td>{{this.rep}}</td>
+            <td>{{this.clientID}}</td>
+            <td>{{this.name}}</td>
+            <td><button onclick="deleteOrder({{orderID}})">Delete</button></td>
+            <td><button><a href="/order/{{orderID}}">Update</a></button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</fieldset>   
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="./js/add_order.js"></script>
+<script src="./js/delete_order.js"></script>

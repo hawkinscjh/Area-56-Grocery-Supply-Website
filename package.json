@@ -1,0 +1,25 @@
+{
+  "name": "cs340_project",
+  "version": "1.0.0",
+  "description": "CS340 Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hhadland/cs340_project.git"
+  },
+  "author": "Casey Hawkins, Harry Hadland",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hhadland/cs340_project/issues"
+  },
+  "homepage": "https://github.com/hhadland/cs340_project#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.2",
+    "forever": "^4.0.1",
+    "mysql": "^2.18.1"
+  }
+}

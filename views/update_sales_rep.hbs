@@ -1,0 +1,17 @@
+<h1>Update {{data.[0].fName}} {{data.[0].lName}}</h1>
+
+<form id = "update-sales_rep-form-ajax">
+    Sales Rep ID (can't alter): <input type="number" name="repID" id="repID" value= {{data.[0].repID}} readonly> <br>
+    First Name: <input type="text" name="fNameInput" id="fNameInput" value= "{{data.[0].fName}}"> <br>
+    Last Name: <input type="text" name="lNameInput" id="lNameInput" value= "{{data.[0].lName}}"> <br>
+    E-mail: <input type="text" name="repEmailInput" id="repEmailInput" value= "{{data.[0].email}}"> <br>
+    Phone #: <input type="text" name="repPhoneInput" id="repPhoneInput" value= "{{data.[0].phone}}"> <br>
+<input type="submit" id= "submitButton" value = "Submit">
+</form>
+<p></p>
+
+    <div>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/sales_representatives">Return to contacts</a></button>
+    </div>
+
+<script src="http://flip3.engr.oregonstate.edu:9301/js/update_sales_rep.js"></script>

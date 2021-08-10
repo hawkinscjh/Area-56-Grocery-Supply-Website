@@ -1,0 +1,17 @@
+<h1>Update {{data.[0].fName}} {{data.[0].lName}}</h1>
+
+<form id = "update-contact-form-ajax">
+    Contact ID (can't alter): <input type="number" name="contactID" id="contactID" value= {{data.[0].contactID}} readonly> <br>
+    First Name: <input type="text" name="fNameInput" id="fNameInput" value= "{{data.[0].fName}}"> <br>
+    Last Name: <input type="text" name="lNameInput" id="lNameInput" value= "{{data.[0].lName}}"> <br>
+    E-mail: <input type="text" name="contactEmailInput" id="contactEmailInput" value= "{{data.[0].email}}"> <br>
+    Phone #: <input type="text" name="contactPhoneInput" id="contactPhoneInput" value= "{{data.[0].phone}}"> <br>
+<input type="submit" id= "submitButton" value = "Submit">
+</form>
+<p></p>
+
+    <div>
+       <button><a href="http://flip3.engr.oregonstate.edu:9301/contacts">Return to contacts</a></button>
+    </div>
+
+<script src="http://flip3.engr.oregonstate.edu:9301/js/update_contact.js"></script>

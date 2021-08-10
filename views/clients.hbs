@@ -1,0 +1,88 @@
+<fieldset>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301">Home</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/clients">Clients</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/contacts">Contacts</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/products">Products</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/orders">Orders</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/sales_representatives">Sales Representatives</a></button>
+</fieldset>
+
+<fieldset>
+<h1>
+    Clients
+</h1>
+</fieldset>
+
+<fieldset>
+<h2>Add Client</h2>
+<form id="add-client-form-ajax">
+    <label>Name:* <input type="text" name="clientNameInput" id="clientNameInput" required></label>
+    <label>Address:* <input type="text" name="clientAddressInput" id="clientAddressInput" required></label>
+    <label>E-mail: <input type="text" name="clientEmailInput" id="clientEmailInput"/></label>
+    <label>Phone #: <input type="text" name="clientPhoneInput" id="clientPhoneInput"></label>
+    <label>Contact:* </label>
+    <select  name="contactIDInput" id="contactIDInput">
+        <option value ="">Select Contact</option>
+            {{#each contacts}}
+            <option value={{this.contactID}}>{{this.fName}} {{this.lName}}</option>
+            {{/each}}
+    </select> <br>
+    <label>Sales Rep:* </label>
+    <select  name="repIDInput" id="repIDInput">
+        <option value ="">Select Rep</option>
+            {{#each reps}}
+            <option value={{this.repID}}>{{this.fName}} {{this.lName}}</option>
+            {{/each}}
+    </select> <br>
+    <input type="submit" value="submit">
+</form>
+</fieldset>
+
+<fieldset>
+<h2>Clients Table</h2>
+<p></p>
+<!-- Data Table-->
+<table id="dataTable">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.clientID}}</td>
+            <td>{{this.name}}</td>
+            <td>{{this.address}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.phone}}</td>
+            <td>{{this.contactID}}</td>
+            <td>{{this.contact}}</td>
+            <td>{{this.repID}}</td>
+            <td>{{this.rep}}</td>
+            <td><button onclick="deleteClient({{clientID}})">Delete</button></td>
+            <td><button><a href="/clients/{{clientID}}">Update</a></button></td>
+
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</fieldset>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="./js/add_client.js"></script>
+<script src="./js/delete_client.js"></script>

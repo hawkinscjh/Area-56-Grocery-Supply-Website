@@ -1,0 +1,84 @@
+<fieldset>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301">Home</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/clients">Clients</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/contacts">Contacts</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/products">Products</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/orders">Orders</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/sales_representatives">Sales Representatives</a></button>
+</fieldset>
+<fieldset>
+<h1>
+    Contacts
+</h1>
+</fieldset>
+<fieldset>
+<h2>Add Contact</h2>
+<form id="add-contact-form-ajax">
+    <label>First Name:* <input type="text" name="fNameInput" id="fNameInput"required/></label>
+    <label>Last Name:* <input type="text" name="lNameInput" id="lNameInput"required/></label>
+    <label>E-mail: <input type="text" name="contactEmailInput" id="contactEmailInput"/></label>
+    <label>Phone #: <input type="text" name="contactPhoneInput" id="contactPhoneInput"/></label>
+    <input type="submit">
+
+
+</form>
+</fieldset>
+<fieldset>
+<p></p>
+<h2>Contacts Table</h2>
+<!--Search field-->
+<h3>Search</h3>
+<form id="search-contact-html" method='GET' action='/contacts'>
+    <label for="input-fName">Search by First Name: </label>
+    <input type="text" name="fName" id="input-fName-html-search">
+    
+    <input type="submit">
+    <a href='/contacts'><button>Reset</button></a>
+</form>
+<form id="search-contact-html" method='GET' action='/contacts'>
+    <label for="input-lName">Search by Last Name: </label>
+    <input type="text" name="lName" id="input-lName-html-search">
+    
+    <input type="submit">
+    <a href='/contacts'><button>Reset</button></a>
+</form>
+<p></p>
+<!-- Data Table-->
+<table id="dataTable">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.contactID}}</td>
+            <td>{{this.fName}}</td>
+            <td>{{this.lName}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.phone}}</td>
+            <td><button onclick="deleteContact({{contactID}})">Delete</button></td>
+            <td><button><a href="/contact/{{contactID}}">Update</a></button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</fieldset>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="./js/add_contact.js"></script>
+<script src="./js/delete_contact.js"></script>

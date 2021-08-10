@@ -1,0 +1,22 @@
+<form id = "update-order-line-form-ajax">
+    Order ID (can't alter): <input type="number" name="updateOrderID" id="updateOrderID" value= {{data.[0].orderID}} readonly> <br>
+        <label>Product: </label>
+    <select  name="input-productID" id="input-productID" value ={{data.[0].productID}} readonly><br>
+        <option value ={{data.[0].productID}}>{{data.[0].item}}</option>
+        </select><br>
+
+    Individual Cost: ${{data.[0].cost}}<br>
+
+    <label>Quantity: <input type="number" name="quantityInput" id="quantityInput" value = {{data.[0].quantity}} ></label><br>
+    Total Cost*: ${{data.[0].total_cost}}<br>
+    *Total Cost will update with new total after submission.<br>
+
+<input type="submit" id= "submitButton" value = "Submit">
+</form>
+<p></p>
+
+    <div>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/order/{{data.[0].orderID}}">Return to order</a></button>
+    </div>
+
+<script src="http://flip3.engr.oregonstate.edu:9301/js/update_order_line.js"></script>

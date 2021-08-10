@@ -1,0 +1,53 @@
+body{
+    background-color: gray;
+    color: rgb(135, 216, 135); 
+}
+button{
+    background-color: rgb(196, 193, 193);
+}
+input{
+    background-color: rgb(196, 193, 193);
+}
+
+thead{
+    border-style: solid;
+    border-color: rgb(61, 112, 61); 
+    
+}
+tbody{
+    border-style: solid;
+    border-color: rgb(61, 112, 61);
+}
+th{
+    border-style: solid;
+    border-color: rgb(61, 112, 61);
+    background-color: gray;
+}
+
+tr{
+    border-style: solid;
+    border-color: rgb(61, 112, 61);
+    background-color: gray;
+}
+td{
+    border-style: solid;
+    border-color: rgb(61, 112, 61);
+    background-color: gray;
+}
+submit{
+    background-color: rgb(196, 193, 193);
+}
+select{
+    background-color: rgb(196, 193, 193);
+}
+option{
+    background-color: rgb(196, 193, 193);
+}
+a{
+    color: rgb(22, 106, 112); ;
+}
+#dataTable{
+    border-style: solid;
+    border-color: rgb(61, 112, 61);
+    background-color: rgb(61, 112, 61) ;
+}

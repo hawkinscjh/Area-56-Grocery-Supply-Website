@@ -1,0 +1,80 @@
+
+<fieldset>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301">Home</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/clients">Clients</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/contacts">Contacts</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/products">Products</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/orders">Orders</a></button>
+    <button><a href="http://flip3.engr.oregonstate.edu:9301/sales_representatives">Sales Representatives</a></button>
+</fieldset>
+<fieldset>
+<h1>
+    Products
+</h1>
+</fieldset>
+<fieldset>
+<h2>Add Product</h2>
+<form id="add-product-form-ajax">
+    <label>Item:* <input type="text" name="itemInput" id="itemInput"required></label>
+    <label>Cost:* <input type="text" name="itemCost" id="itemCost"required></label>
+    <input type="submit" value="submit">
+</form>
+<p></p>
+</fieldset>
+<fieldset>
+<h2>Products Table</h2>
+<!--Search field-->
+<h3>Search</h3>
+<form id="search-products-html" method='GET' action='/products'>
+    <label for="input-item">Search by Item: </label>
+    <input type="text" name="item" id="input-item-html-search">
+    
+    <input type="submit">
+    <a href='/products'><button>Reset</button></a>
+</form>
+<form id="search-products-html" method='GET' action='/products'>
+    <label for="input-cost">Search by Cost: </label>
+    <input type="text" name="cost" id="input-cost-html-search">
+    
+    <input type="submit">
+    <a href='/products'><button>Reset</button></a>
+</form>
+<p></p>
+<!-- Data Table-->
+<table id="dataTable">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.productID}}</td>
+            <td>{{this.item}}</td>
+            <td>${{this.cost}}</td>
+            <td><button onclick="deleteProduct({{productID}})">Delete</button></td>
+            <td><button><a href="/products/{{productID}}">Update</a></button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</fieldset>
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="./js/add_product.js"></script>
+<script src="./js/delete_product.js"></script>
+<script src="./js/update_product.js"></script>

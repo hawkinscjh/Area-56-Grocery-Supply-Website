@@ -1,0 +1,91 @@
+    <fieldset>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301">Home</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/clients">Clients</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/contacts">Contacts</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/products">Products</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/orders">Orders</a></button>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/sales_representatives">Sales Representatives</a></button>
+    </fieldset>
+<fieldset>
+<h1>
+    Sales Representatives
+</h1>
+</fieldset>
+
+<fieldset>
+<h2>Add Sales Representative</h2>
+<form id="add-salesRep-form-ajax">
+    <label>First Name:* <input type="text" name="fNameInput" id="fNameInput"required/></label>
+    <label>Last Name:* <input type="text" name="lNameInput" id="lNameInput"required/></label>
+    <label>E-mail: <input type="text" name="repEmailInput" id="repEmailInput"/></label>
+    <label>Phone #: <input type="text" name="repPhoneInput" id="repPhoneInput"/></label>
+
+    <input type="submit" value="submit"/>
+
+
+</form>
+</fieldset>
+
+<fieldset>
+<p></p>
+
+<h2>Sales Representatives Table</h2>
+
+<!--Search field-->
+
+<h3>Search</h3>
+<form id="search-sales_rep-html" method='GET' action='/sales_representatives'>
+    <label for="input-fName">Search by First Name: </label>
+    <input type="text" name="fName" id="input-fName-html-search">
+    
+    <input type="submit">
+    <a href='/sales_representatives'><button>Reset</button></a>
+</form>
+<form id="search-sales_rep-html" method='GET' action='/sales_representatives'>
+    <label for="input-lName">Search by Last Name: </label>
+    <input type="text" name="lName" id="input-lName-html-search">
+    
+    <input type="submit">
+    <a href='/sales_representatives'><button>Reset</button></a>
+</form>
+<!-- Table of data-->
+<table id="dataTable">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{!-- For each row, print the id, fname, lname, homeworld and age, in order --}}
+        {{#each data}}
+        <tr>
+            <td>{{this.repID}}</td>
+            <td>{{this.fName}}</td>
+            <td>{{this.lName}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.phone}}</td>
+            <td><button onclick="deleteSalesRep({{repID}})">Delete</button></td>
+            <td><button><a href="/sales_representatives/{{repID}}">Update</a></button></td>
+
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</fieldset>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="./js/add_sales_rep.js"></script>
+<script src="./js/delete_sales_rep.js"></script>

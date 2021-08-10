@@ -1,0 +1,92 @@
+<fieldset>
+<h1>Order ID: {{order.[0].orderID}}</h1><h2>Total Order Cost: {{#each order_cost}} ${{this.order_cost}} {{/each}}</h2> 
+<p></p>
+
+    <div>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/orders">Return to orders</a></button>
+    </div>
+</fieldset>
+<fieldset>
+<h2>Update Order Information</h2>
+
+<form id = "update-order-form-ajax">
+    Order ID (can't alter): <input type="number" name="updateOrderID" id="updateOrderID" value= {{order.[0].orderID}} readonly> <br>
+    <label>Sales Rep: </label>
+    <select  name="input-repID" id="input-repID">
+        <option value ={{order_rep.[0].repID}}>{{order_rep.[0].fName}} {{order_rep.[0].lName}}</option>
+            {{#each reps}}
+            <option value={{this.repID}}>{{this.fName}} {{this.lName}}</option>
+            {{/each}}
+    </select> <br>
+        <label>Client: </label>
+    <select  name="input-clientID" id="input-clientID">
+        <option value ={{order_client.[0].clientID}}>{{order_client.[0].name}}</option>
+            {{#each clients}}
+            <option value={{this.clientID}}>{{this.name}}</option>
+            {{/each}}
+    </select> <br>
+<input type="submit" id= "submitButton" value = "Submit">
+</form>
+</fieldset>
+
+<fieldset>
+<p></p>
+<h2>Add Product to Order</h2>
+<form id="add-order_product-form-ajax">
+    <label>Order ID</label>
+    <input type="number" name="lineOrderID" id="lineOrderID" value= {{order.[0].orderID}} readonly> <br>
+    <label>Product:* </label>
+    <select  name="input-product" id="input-product">
+        <option value ="">Select an Item</option>
+            {{#each items}}
+            <option value="{{this.productID}}">{{this.item}}</option>
+            {{/each}}
+    </select> <br>
+    <label>Quantity:* <input type="number" name="quantityInput" id="quantityInput" min="1" required/></label>
+    <input type="submit">
+    <h5 id="error"></h5>
+</fieldset>
+</form>
+
+<fieldset>
+<h2>Order Contents</h2>
+<!-- Data Table-->
+<table id="dataTable">
+
+    {{!-- Header section --}}
+    <thead>
+
+        {{!-- For just the first row, we print each key of the row object as a header cell so we
+        know what each column means when the page renders --}}
+        <tr>
+            {{#each data.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        
+        {{#each data}}
+        <tr>
+            <td>{{this.orderID}}</td>
+            <td>{{this.productID}}</td>
+            <td>{{this.item}}</td>
+            <td>{{this.quantity}}</td>
+            <td>${{this.item_cost}}</td>
+            <td>${{this.total_cost}}</td>
+            <td><button onclick="deleteOrder({{orderID}},{{productID}})">Delete</button></td>
+            <td><button><a href="/order_product/{{orderID}}&{{productID}}">Update</a></button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</fieldset>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="http://flip3.engr.oregonstate.edu:9301/js/update_order.js"></script>
+<script src="http://flip3.engr.oregonstate.edu:9301/js/add_order_line.js"></script>
+<script src="http://flip3.engr.oregonstate.edu:9301/js/delete_order_line.js"></script>

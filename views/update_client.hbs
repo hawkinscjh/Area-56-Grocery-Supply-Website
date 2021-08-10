@@ -1,0 +1,33 @@
+<h1>Update {{data.[0].fName}} {{data.[0].lName}}</h1>
+
+<form id = "update-client-form-ajax">
+    Client ID (can't alter): <input type="number" name="clientID" id="clientID" value= {{data.[0].clientID}} readonly> <br>
+    Name: <input type="text" name="clientNameInput" id="clientNameInput" value= "{{data.[0].name}}"> <br>
+    Address: <input type="text" name="clientAddressInput" id="clientAddressInput" value= "{{data.[0].address}}"> <br>
+    E-mail: <input type="text" name="clientEmailInput" id="clientEmailInput" value= "{{data.[0].email}}"> <br>
+    Phone #: <input type="text" name="clientPhoneInput" id="clientPhoneInput" value= "{{data.[0].phone}}"> <br>
+    <label>Contact: </label>
+    <select  name="contactIDInput" id="contactIDInput">
+        <option value ={{data.[0].contactID}}>{{data.[0].contact}}</option>
+            {{#each contacts}}
+            <option value={{this.contactID}}>{{this.fName}} {{this.lName}}</option>
+            {{/each}}
+    </select> <br>
+    <label>Sales Rep: </label>
+    <select  name="repIDInput" id="repIDInput">
+        <option value ={{data.[0].repID}}>{{data.[0].rep}}</option>
+            {{#each reps}}
+            <option value={{this.repID}}>{{this.fName}} {{this.lName}}</option>
+            {{/each}}
+    </select> <br>
+<input type="submit" id= "submitButton" value = "Submit">
+</form>
+
+<p></p>
+
+    <div>
+        <button><a href="http://flip3.engr.oregonstate.edu:9301/clients">Return to clients</a></button>
+    </div>
+
+<script src="http://flip3.engr.oregonstate.edu:9301/js/update_client.js"></script>
+

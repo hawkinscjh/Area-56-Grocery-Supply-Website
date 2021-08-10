@@ -1,2 +1,2 @@
-# cs340_database
-Website with full database backend using mySQL and NodeJS
+# cs340_project
+The new project repository
