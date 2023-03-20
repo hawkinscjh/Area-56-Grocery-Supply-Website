@@ -23,9 +23,6 @@ app.set('view engine', '.hbs');                 // Tell express to use the handl
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
-//Used solution from stack overflow for getting public to work: https://stackoverflow.com/questions/24433733/learning-node-express-public-folder-not-working
-//uses http://expressjs.com/en/4x/api.html as a reference for how to do this
-
 app.use(express.static(__dirname + '/public'));
 
 /*
