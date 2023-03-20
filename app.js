@@ -1178,5 +1178,5 @@ app.get('/sales_representatives/:repID', (req, res) =>{
 //Listener
 
 app.listen(PORT, function(){            
-    console.log('Express started on http://flip3.engr.oregonstate.edu:' + PORT + '; press Ctrl-C to terminate.')
+    console.log('Express started on localhost:' + PORT + '; press Ctrl-C to terminate.')
 });
