@@ -8,25 +8,7 @@ var app     = express();            // We need to instantiate an express object 
 PORT        = 3306;                 // Set a port number at the top so it's easy to change in the future
 
 // Database
-//var connection = require('./database/db-connector')
-var mysql = require('mysql');
-
-var connection = mysql.createConnection({
-  host     : 'area56db.cqundkvbdrrd.us-east-2.rds.amazonaws.com',
-  user     : 'admin',
-  password : 'Hawkins32',
-  port     : '3306',
-  database  : 'area56db'
-});
-
-connection.connect(function(err) {
-  if (err) {
-    console.error('Database connection failed: ' + err.stack);
-    return;
-  }
-
-  console.log('Connected to database.');
-});
+var db = require('./database/db-connector')
 
 // Implementing handlebars
 
@@ -66,17 +48,17 @@ app.get('/clients', (req, res) =>{
         let query2 = `SELECT * FROM contacts;`;
         let query3 = `SELECT * FROM sales_representatives;`;
 
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             if(!error){
             
             let clients = rows;
             
-            connection.query(query2, function(error, rows, fields){
+            db.connection.query(query2, function(error, rows, fields){
                 if(!error){
                     let contacts = rows;
 
                     //run 3rd query for order's sales_representative
-                    connection.query(query3, function(error, rows, fields){
+                    db.connection.query(query3, function(error, rows, fields){
                         if(!error){
                             let reps = rows;
 
@@ -103,7 +85,7 @@ app.get('/clients', (req, res) =>{
 //-----------------------------
 
 app.delete('/clients/:clientID', (req, res) => {
-    connection.query(`DELETE FROM clients WHERE clientID=?;`, [req.params.clientID], function (error, result) {
+    db.connection.query(`DELETE FROM clients WHERE clientID=?;`, [req.params.clientID], function (error, result) {
         if (!error) {
             res.send('Deleted successfully');
         }else{
@@ -124,7 +106,7 @@ app.post('/add-client-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `INSERT INTO clients (name, address, email, phone, contactID, repID) VALUES ('${data.name}', '${data.address}', '${data.email}', '${data.phone}', '${data.contactID}', '${data.repID}')`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -137,7 +119,7 @@ app.post('/add-client-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM clients;`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -168,7 +150,7 @@ app.post('/update-client-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `UPDATE clients SET name='${data.name}', address='${data.address}', email='${data.email}', phone='${data.phone}', contactID='${data.contactID}', repID='${data.repID}' WHERE clientID = ${data.clientID};`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -181,7 +163,7 @@ app.post('/update-client-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM clients WHERE clientID = ${data.clientID};`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -217,17 +199,17 @@ let query1 = `SELECT clients.clientID, clients.name, clients.address, clients.em
  let query3 = `SELECT * FROM sales_representatives;`;
 
 
- connection.query(query1, function(error, rows, fields){    // Execute the query
+ db.connection.query(query1, function(error, rows, fields){    // Execute the query
     if(!error){
     
     let clients = rows;
     
-    connection.query(query2, function(error, rows, fields){
+    db.connection.query(query2, function(error, rows, fields){
         if(!error){
             let contacts = rows;
 
             //run 3rd query for order's sales_representative
-            connection.query(query3, function(error, rows, fields){
+            db.connection.query(query3, function(error, rows, fields){
                 if(!error){
                     let reps = rows;
 
@@ -269,7 +251,7 @@ app.get('/contacts', function(req, res)                 // This is the basic syn
         else{
             query1 = `SELECT * FROM contacts WHERE lName LIKE "${req.query.lName}%"`
         }
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             
             //get the contacts
             let contacts = rows;
@@ -292,7 +274,7 @@ app.post('/add-contact-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `INSERT INTO contacts (fName, lName, email, phone) VALUES ('${data.fName}', '${data.lName}', '${data.email}', '${data.phone}')`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -305,7 +287,7 @@ app.post('/add-contact-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM contacts;`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -336,7 +318,7 @@ app.post('/update-contact-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `UPDATE contacts SET fName='${data.fName}', lName='${data.lName}', email='${data.email}', phone='${data.phone}' WHERE contactID = ${data.contactID};`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -349,7 +331,7 @@ app.post('/update-contact-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM contacts WHERE contactID = ${data.contactID};`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -377,7 +359,7 @@ app.get('/contact/:contactID', (req, res) =>{
         //Define our query
         let query1 = `SELECT * FROM contacts WHERE contactID = ${req.params.contactID};`;
         
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             if(!error){
             //get the contact
             let contacts = rows;
@@ -398,7 +380,7 @@ app.get('/contact/:contactID', (req, res) =>{
 //-----------------------------
 
 app.delete('/contacts/:contactID', (req, res) => {
-    connection.query(`DELETE FROM contacts WHERE contactID=?;`, [req.params.contactID], function (error, result) {
+    db.connection.query(`DELETE FROM contacts WHERE contactID=?;`, [req.params.contactID], function (error, result) {
         if (!error) {
             res.send('Deleted successfully');
         }else{
@@ -467,7 +449,7 @@ app.get('/orders', function(req, res)
 
         }
         
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             if (error) {
 
                 // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -479,7 +461,7 @@ app.get('/orders', function(req, res)
             //get the orders
             let orders = rows;
             //reps
-            connection.query(query2, function(error, rows, fields){    // Execute the query
+            db.connection.query(query2, function(error, rows, fields){    // Execute the query
                 if (error) {
     
                     // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -491,7 +473,7 @@ app.get('/orders', function(req, res)
                 //get the orders
                 let reps = rows;
                 //clients
-                connection.query(query3, function(error, rows, fields){    // Execute the query
+                db.connection.query(query3, function(error, rows, fields){    // Execute the query
                     if (error) {
         
                         // Log the error to the terminal so we know what went wrong, and send the visitor an HTTP response 400 indicating it was a bad request.
@@ -530,7 +512,7 @@ app.post('/add-order-ajax', function(req, res)
 
     // Create the query and run it on the database
     query1 = `INSERT INTO orders (repID, clientID) VALUES (${data.repID}, ${data.clientID})`;
-    connection.query(query1, function(error, rows, fields){
+    db.connection.query(query1, function(error, rows, fields){
 
         // Check to see if there was an error
         if (error) {
@@ -543,7 +525,7 @@ app.post('/add-order-ajax', function(req, res)
         {
             // If there was no error, perform a SELECT * on contacts
             query2 = `SELECT * FROM orders;`;
-            connection.query(query2, function(error, rows, fields){
+            db.connection.query(query2, function(error, rows, fields){
 
                 // If there was an error on the second query, send a 400
                 if (error) {
@@ -567,7 +549,7 @@ app.post('/add-order-ajax', function(req, res)
 //-----------------------------
 
 app.delete('/orders/:orderID', (req, res) => {
-    connection.query(`DELETE FROM orders WHERE orderID=?;`, [req.params.orderID], function (error, result) {
+    db.connection.query(`DELETE FROM orders WHERE orderID=?;`, [req.params.orderID], function (error, result) {
         if (!error) {
             res.send('Deleted successfully');
         }else{
@@ -588,7 +570,7 @@ app.post('/add-order-line-ajax', function(req, res)
 
     // Create the query and run it on the database
     query1 = `INSERT INTO order_products (orderID, productID, quantity) VALUES (${data.orderID}, ${data.productID}, ${data.quantity})`;
-    connection.query(query1, function(error, rows, fields){
+    db.connection.query(query1, function(error, rows, fields){
 
         // Check to see if there was an error
         if (error) {
@@ -601,7 +583,7 @@ app.post('/add-order-line-ajax', function(req, res)
         {
             // If there was no error, perform a SELECT * on contacts
             query2 = `SELECT * FROM order_products;`;
-            connection.query(query2, function(error, rows, fields){
+            db.connection.query(query2, function(error, rows, fields){
 
                 // If there was an error on the second query, send a 400
                 if (error) {
@@ -634,7 +616,7 @@ app.get('/order_product/:orderID&:productID', (req, res) =>{
                 INNER JOIN products ON order_products.productID = products.productID
                 WHERE order_products.orderID = ${req.params.orderID} AND order_products.productID = ${req.params.productID};`;
 
-    connection.query(query1, function(error, rows, fields){    // Execute the query
+    db.connection.query(query1, function(error, rows, fields){    // Execute the query
         if(!error){
         //get the contact
         let order_line = rows;
@@ -663,7 +645,7 @@ app.post('/update-order-line-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `UPDATE order_products SET quantity=${data.quantity} WHERE orderID = ${data.orderID} AND productID =${data.productID};`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -680,7 +662,7 @@ app.post('/update-order-line-ajax', function(req, res)
                         FROM order_products                
                         INNER JOIN products ON order_products.productID = products.productID
                         WHERE order_products.orderID = ${data.orderID} AND order_products.productID = ${data.productID};`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -713,7 +695,7 @@ app.post('/update-order-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `UPDATE orders SET repID=${data.repID}, clientID=${data.clientID} WHERE orderID = ${data.orderID};`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -726,7 +708,7 @@ app.post('/update-order-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM orders WHERE orderID = ${data.orderID};`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -789,7 +771,7 @@ app.get('/order/:orderID', (req, res) =>{
     let query8 = `SELECT sum(order_products.quantity * products.cost) AS order_cost FROM order_products
     INNER JOIN products on order_products.productID = products.productID
     WHERE orderID = ${req.params.orderID};`;
-    connection.query(query1, function(error, rows, fields){    // Execute the query
+    db.connection.query(query1, function(error, rows, fields){    // Execute the query
         if(!error){
         //get the specific order information
         let order_products = rows;
@@ -799,37 +781,37 @@ app.get('/order/:orderID', (req, res) =>{
         };*/
         
         //run second query
-        connection.query(query2, function(error, rows, fields){
+        db.connection.query(query2, function(error, rows, fields){
             if(!error){
                 let items = rows;
 
                 //run 3rd query for order's sales_representative
-                connection.query(query3, function(error, rows, fields){
+                db.connection.query(query3, function(error, rows, fields){
                     if(!error){
                         let order_rep = rows;
         
                         //run 4th query for order's client
-                        connection.query(query4, function(error, rows, fields){
+                        db.connection.query(query4, function(error, rows, fields){
                         if(!error){
                             let order_client = rows;
             
                             //run 5th query for sales_representatives list
-                            connection.query(query5, function(error, rows, fields){
+                            db.connection.query(query5, function(error, rows, fields){
                                 if(!error){
                                     let reps = rows;
                     
                                     //run 6th query for clients list
-                                    connection.query(query6, function(error, rows, fields){
+                                    db.connection.query(query6, function(error, rows, fields){
                                     if(!error){
                                         let clients = rows;
                         
                                         //run 7th query for order's ID
-                                        connection.query(query7, function(error, rows, fields){
+                                        db.connection.query(query7, function(error, rows, fields){
                                             if(!error){
                                                 let order = rows;
                                 
 
-                                                connection.query(query8, function(error, rows, fields){
+                                                db.connection.query(query8, function(error, rows, fields){
                                                     if(!error){
                                                         let order_cost = rows;
                                                         return res.render('specific_order_products', {data: order_products, items: items, order_rep: order_rep, order_client: order_client, reps: reps, clients: clients, order: order, order_cost: order_cost});
@@ -880,7 +862,7 @@ app.get('/order/:orderID', (req, res) =>{
 //-----------------------------
 
 app.delete('/order_product/:orderID&:productID', (req, res) => {
-    connection.query(`DELETE FROM order_products WHERE orderID=? AND productID=?;`, [req.params.orderID,req.params.productID], function (error, result) {
+    db.connection.query(`DELETE FROM order_products WHERE orderID=? AND productID=?;`, [req.params.orderID,req.params.productID], function (error, result) {
         if (!error) {
             res.send('Deleted successfully');
         }else{
@@ -905,7 +887,7 @@ app.get('/products', function(req, res)                 // This is the basic syn
     else{
         query1 = `SELECT * FROM products WHERE item LIKE "${req.query.item}%"`
     }
-    connection.query(query1, function(error, rows, fields){    // Execute the query
+    db.connection.query(query1, function(error, rows, fields){    // Execute the query
         
         
         let products = rows;
@@ -919,7 +901,7 @@ app.get('/products', function(req, res)                 // This is the basic syn
 //-----------------------------
 
 app.delete('/products/:productID', (req, res) => {
-    connection.query(`DELETE FROM products WHERE productID=?;`, [req.params.productID], function (error, result) {
+    db.connection.query(`DELETE FROM products WHERE productID=?;`, [req.params.productID], function (error, result) {
         if (!error) {
             res.send('Deleted successfully');
         }else{
@@ -940,7 +922,7 @@ app.post('/add-product-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `INSERT INTO products (item, cost) VALUES ('${data.item}', '${data.cost}')`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -953,7 +935,7 @@ app.post('/add-product-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM products;`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -984,7 +966,7 @@ app.post('/update-product-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `UPDATE products SET item='${data.item}', cost='${data.cost}' WHERE productID = ${data.productID};`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -997,7 +979,7 @@ app.post('/update-product-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM products WHERE productID = ${data.productID};`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -1024,7 +1006,7 @@ app.get('/products/:productID', (req, res) =>{
         //let query1 = "SELECT * FROM contacts;";               // Define our query
         let query1 = `SELECT * FROM products WHERE productID = ${req.params.productID};`;
         
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             if(!error){
             //get the contact
             let products = rows;
@@ -1057,7 +1039,7 @@ app.get('/sales_representatives', function(req, res)
         else{
             query1 = `SELECT * FROM sales_representatives WHERE lName LIKE "${req.query.lName}%"`
         }
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             
             
             let sales_representatives = rows;
@@ -1071,7 +1053,7 @@ app.get('/sales_representatives', function(req, res)
 //-----------------------------
 
 app.delete('/sales_representatives/:repID', (req, res) => {
-    connection.query(`DELETE FROM sales_representatives WHERE repID=?;`, [req.params.repID], function (error, result) {
+    db.connection.query(`DELETE FROM sales_representatives WHERE repID=?;`, [req.params.repID], function (error, result) {
         if (!error) {
             res.send('Deleted successfully');
         }else{
@@ -1092,7 +1074,7 @@ app.post('/add-salesRep-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `INSERT INTO sales_representatives (fName, lName, email, phone) VALUES ('${data.fName}', '${data.lName}', '${data.email}', '${data.phone}')`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -1105,7 +1087,7 @@ app.post('/add-salesRep-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM sales_representatives;`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -1136,7 +1118,7 @@ app.post('/update-sales_rep-ajax', function(req, res)
   
         // Create the query and run it on the database
         query1 = `UPDATE sales_representatives SET fName='${data.fName}', lName='${data.lName}', email='${data.email}', phone='${data.phone}' WHERE repID = ${data.repID};`;
-        connection.query(query1, function(error, rows, fields){
+        db.connection.query(query1, function(error, rows, fields){
     
             // Check to see if there was an error
             if (error) {
@@ -1149,7 +1131,7 @@ app.post('/update-sales_rep-ajax', function(req, res)
             {
                 // If there was no error, perform a SELECT * on contacts
                 query2 = `SELECT * FROM sales_representatives WHERE repID = ${data.repID};`;
-                connection.query(query2, function(error, rows, fields){
+                db.connection.query(query2, function(error, rows, fields){
     
                     // If there was an error on the second query, send a 400
                     if (error) {
@@ -1177,7 +1159,7 @@ app.get('/sales_representatives/:repID', (req, res) =>{
         // Define our query
         let query1 = `SELECT * FROM sales_representatives WHERE repID = ${req.params.repID};`;
         
-        connection.query(query1, function(error, rows, fields){    // Execute the query
+        db.connection.query(query1, function(error, rows, fields){    // Execute the query
             if(!error){
             //get the contact
             let sales_representatives = rows;
